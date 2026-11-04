@@ -11,7 +11,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from flask import Flask, jsonify, request, send_from_directory, session
+from flask import Flask, Response, jsonify, request, send_from_directory, session
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -249,6 +249,28 @@ def _request_chat(messages):
 @app.route("/")
 def home():
     return send_from_directory(FRONTEND_DIR, "index.html")
+
+
+@app.get("/sitemap.xml")
+def sitemap():
+    sitemap_xml = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://intervexa-ai-bk7g.onrender.com/</loc>
+  </url>
+</urlset>
+"""
+    return Response(sitemap_xml, status=200, content_type="application/xml; charset=utf-8")
+
+
+@app.get("/robots.txt")
+def robots():
+    robots_txt = """User-agent: *
+Allow: /
+
+Sitemap: https://intervexa-ai-bk7g.onrender.com/sitemap.xml
+"""
+    return Response(robots_txt, status=200, content_type="text/plain; charset=utf-8")
 
 
 @app.get("/<path:asset_path>")
