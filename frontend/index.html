@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Intervexa AI — realistic mock interview practice with actionable feedback.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/premium.css">
+  <title>Intervexa AI | Practice with purpose</title>
+</head>
+<body>
+  <div class="page-noise" aria-hidden="true"></div>
+  <section class="cinematic-intro" id="cinematic-intro" aria-labelledby="intro-title">
+    <div class="cosmic-nebula" aria-hidden="true"></div>
+    <div class="star-field" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="planet-system" aria-hidden="true">
+      <div class="planet-haze"></div>
+      <div class="planet-orbit planet-orbit-one"></div>
+      <div class="planet-orbit planet-orbit-two"></div>
+      <div class="intro-orb"><span>✦</span></div>
+      <div class="intro-moon"></div>
+    </div>
+    <div class="planetary-horizon" aria-hidden="true"></div>
+    <div class="intro-content">
+      <p class="intro-kicker"><span>✦</span> INTERVEXA AI</p>
+      <h1 id="intro-title">Meet your next<br><em>best interview.</em></h1>
+      <p>Practice thoughtfully. Get better with every answer.</p>
+      <button class="button button-primary intro-cta" type="button" data-action="enter-dashboard">Start your interview <span>→</span></button>
+      <small>Private practice space · No account required</small>
+    </div>
+    <button class="intro-skip" type="button" data-action="enter-dashboard">Skip intro</button>
+  </section>
+  <header class="navbar">
+    <a class="logo" href="#dashboard"><span class="logo-mark">✦</span><span>intervexa<span class="ai-text">.ai</span></span></a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a class="active" href="#dashboard" data-nav="dashboard">Dashboard</a>
+      <a href="#practice" data-nav="practice">Practice</a>
+      <a href="#project-viva" data-nav="projects">Project viva</a>
+      <a href="#resume-analyzer" data-nav="resume">Resume</a>
+      <a href="#coding-arena" data-nav="coding">Coding</a>
+      <a href="#skill-galaxy" data-nav="skills">Skills</a>
+      <a href="#history" data-nav="history">History</a>
+      <a href="#career-coach" data-nav="insights">Career coach</a>
+    </nav>
+    <div class="nav-actions"><button class="mobile-menu" type="button" aria-label="Open menu" aria-expanded="false">☰</button><button class="avatar" type="button" data-action="profile">JD</button></div>
+  </header>
+  <section class="auth-modal hidden" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="auth-card">
+      <button class="auth-close" type="button" aria-label="Close authentication dialog" data-action="close-auth">×</button>
+      <p class="eyebrow">INTERVEXA AI ACCOUNT</p><h2 id="auth-title">Practice with a personal edge.</h2><p id="auth-subtitle" class="auth-subtitle">Sign in to save interviews, progress, and personalized reports.</p>
+      <div class="auth-tabs"><button type="button" class="active" data-auth-view="login">Sign in</button><button type="button" data-auth-view="signup">Create account</button></div>
+      <form id="login-form" class="auth-form"><label>Email<input id="login-email" type="email" autocomplete="email" required></label><label>Password<div class="password-field"><input id="login-password" type="password" autocomplete="current-password" required><button type="button" data-action="toggle-password" data-target="login-password">Show</button></div></label><button class="button button-primary" type="submit">Sign in <span>→</span></button><button class="text-button auth-secondary" type="button" data-auth-view="forgot">Forgot password?</button></form>
+      <form id="signup-form" class="auth-form hidden"><label>Full name<input id="signup-name" type="text" autocomplete="name" required></label><label>Email<input id="signup-email" type="email" autocomplete="email" required></label><label>Password<div class="password-field"><input id="signup-password" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-action="toggle-password" data-target="signup-password">Show</button></div></label><button class="button button-primary" type="submit">Create account <span>→</span></button></form>
+      <form id="forgot-form" class="auth-form hidden"><label>Email<input id="forgot-email" type="email" autocomplete="email" required></label><button class="button button-primary" type="submit">Send reset instructions <span>→</span></button><button class="text-button auth-secondary" type="button" data-auth-view="reset">I have a reset token</button><button class="text-button auth-secondary" type="button" data-auth-view="login">Back to sign in</button></form>
+      <form id="reset-form" class="auth-form hidden"><label>Reset token<input id="reset-token" required></label><label>New password<input id="reset-password" type="password" minlength="8" required></label><button class="button button-primary" type="submit">Reset password <span>→</span></button><button class="text-button auth-secondary" type="button" data-auth-view="login">Back to sign in</button></form>
+      <p id="auth-error" class="auth-error" role="alert"></p><p class="auth-note">Google sign-in is unavailable until OAuth credentials are configured on the backend.</p>
+    </div>
+  </section>
+  <section class="profile-modal hidden" id="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title">
+    <div class="auth-card profile-card"><button class="auth-close" type="button" aria-label="Close profile" data-action="close-profile">×</button><p class="eyebrow">YOUR PROFILE</p><h2 id="profile-title">Personalize your practice.</h2><form id="profile-form" class="profile-form"><label>Full name<input id="profile-name" required></label><label>Email<input id="profile-email" disabled></label><label>Avatar URL<input id="profile-avatar"></label><label>Education<input id="profile-education"></label><label>Degree<input id="profile-degree"></label><label>Branch<input id="profile-branch"></label><label>Experience level<input id="profile-experience"></label><label class="full-width">Career goals<textarea id="profile-goals" rows="3"></textarea></label><button class="button button-primary" type="submit">Save profile</button><button class="button button-quiet" type="button" data-action="logout">Log out</button></form><p id="profile-status" class="auth-error" role="status"></p></div>
+  </section>
+
+  <main>
+    <div id="dashboard-view">
+      <section class="hero shell" id="dashboard">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> Your practice space</p>
+          <h1>Show up ready<br>for <em>anything.</em></h1>
+          <p class="hero-description">A thoughtful AI mock interview that helps you build clearer answers, stronger delivery, and real confidence.</p>
+          <div class="hero-actions"><button class="button button-primary" type="button" data-action="start-setup">Start new interview <span>→</span></button><button class="button button-quiet" type="button" data-action="watch-demo">Watch demo <span>▶</span></button><button class="button button-quiet" type="button" data-action="resume">Resume last session</button></div>
+          <p class="hero-note"><span id="hero-session-count">0</span> sessions completed <span>·</span> <span id="hero-streak">Start your practice streak</span></p>
+        </div>
+        <div class="orb-stage" id="orb-stage" aria-label="Interactive AI orb" role="img">
+          <div class="particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="product-showcase" id="product-showcase" aria-label="Interactive preview of the Intervexa interview room">
+            <div class="laptop-glow"></div><div class="laptop-lid"><div class="laptop-camera"></div><div class="laptop-screen"><div class="preview-topbar"><span class="preview-brand">✦ intervexa<span>.ai</span></span><i></i><b>LIVE SESSION</b></div><div class="preview-body"><div class="preview-orb">✦</div><small>AI INTERVIEWER · READY</small><strong>Tell me about a project<br>you're particularly proud of.</strong><div class="preview-progress"><i></i></div><div class="preview-answer"><span>◉</span> Your answer appears here…</div></div></div></div><div class="laptop-base"><span></span></div>
+          </div>
+          <div class="ai-orb"><span>✦</span></div><div class="orb-shadow"></div>
+          <div class="orb-caption"><strong>AI interviewer</strong><span>Ready to practice with you</span></div>
+        </div>
+      </section>
+
+      <section class="shell dashboard-content" id="practice">
+        <div class="section-title"><div><p class="eyebrow">OVERVIEW</p><h2 id="dashboard-greeting">Welcome to Intervexa AI.</h2></div><button class="text-button" type="button" data-action="view-all-history">View all history <span>→</span></button></div>
+        <div class="summary-grid">
+          <article class="summary-card"><span class="summary-icon violet">◈</span><p>Average score</p><strong id="summary-average">—<span>/100</span></strong><small>From your saved reports</small></article>
+          <article class="summary-card"><span class="summary-icon blue">◒</span><p>Interviews completed</p><strong id="summary-count">0</strong><small>Saved to your account</small></article>
+          <article class="summary-card"><span class="summary-icon green">✦</span><p>Practice streak</p><strong id="summary-streak">0 <small>days</small></strong><small>Based on saved sessions</small></article>
+          <article class="summary-card time-card"><span class="summary-icon rose">◷</span><p>Best score</p><strong id="summary-best">—</strong><small>From your saved reports</small></article>
+        </div>
+        <div class="dashboard-columns">
+          <section class="panel categories-panel"><div class="panel-heading"><div><p class="eyebrow">PRACTICE LIBRARY</p><h3>Choose your focus</h3></div><button class="text-button" type="button" data-action="start-setup">Customize <span>→</span></button></div><div class="category-grid" id="category-grid"></div></section>
+          <aside class="panel recommendation"><p class="eyebrow">RECOMMENDED NEXT</p><div class="recommendation-icon">↗</div><h3>Behavioral interview</h3><p>Strengthen your storytelling with STAR-based questions tailored to your experience.</p><div class="recommendation-meta"><span>15 min</span><span>5 questions</span><span>Adaptive</span></div><button class="button button-outline" type="button" data-action="quick-start" data-type="Behavioral Interview">Practice this <span>→</span></button></aside>
+        </div>
+        <div class="dashboard-columns lower-columns" id="history">
+          <section class="panel recent-panel"><div class="panel-heading"><div><p class="eyebrow">YOUR ACTIVITY</p><h3>Recent interviews</h3></div><button class="text-button" type="button" data-action="view-all-history">See all <span>→</span></button></div><div class="interview-list" id="recent-interviews"><p class="conversation-empty">Sign in and complete an interview to build your history.</p></div></section>
+          <section class="panel focus-panel" id="insights"><div class="panel-heading"><div><p class="eyebrow">KEEP GROWING</p><h3>Performance snapshot</h3></div></div><div id="dashboard-skills"><p class="conversation-empty">Sign in to calculate your snapshot.</p></div><p class="focus-tip" id="dashboard-tip"><span>✦</span> Complete an interview to get a personalized focus area.</p></section>
+        </div>
+      </section>
+      <section class="career-coach shell" id="career-coach">
+        <div class="section-title"><div><p class="eyebrow">AI CAREER COACH</p><h2>Turn your goal into a plan.</h2><p class="section-subtitle">Get grounded guidance for your target role, skills, interviews, and next learning steps.</p></div></div>
+        <div class="career-coach-grid">
+          <section class="panel coach-profile">
+            <div class="panel-heading"><div><p class="eyebrow">YOUR PROFILE</p><h3>Build your career plan</h3></div></div>
+            <form id="career-coach-form" class="form-grid">
+              <label>Career goal<input id="career-goal" type="text" placeholder="e.g. Become a backend engineer"></label>
+              <label>Target role<input id="career-role" type="text" placeholder="e.g. Python developer"></label>
+              <label>Experience level<select id="career-experience"><option>Student</option><option>Entry level</option><option>Mid level</option><option>Senior</option></select></label>
+              <label>Timeline<select id="career-timeline"><option>3 months</option><option>6 months</option><option>12 months</option><option>Flexible</option></select></label>
+              <label class="full-width">Current skills<textarea id="career-skills" rows="3" placeholder="List your technical and professional skills"></textarea></label>
+              <label class="full-width">Interests and constraints<textarea id="career-constraints" rows="3" placeholder="Industries, preferred work, time available, or challenges"></textarea></label>
+              <button class="button button-primary full-width" type="submit">Generate career roadmap <span>→</span></button>
+            </form>
+            <div id="career-roadmap" class="career-roadmap" aria-live="polite"><p class="conversation-empty">Your personalized roadmap will appear here.</p></div>
+          </section>
+          <section class="panel career-chat">
+            <div class="panel-heading"><div><p class="eyebrow">CAREER ASSISTANT</p><h3>Ask for guidance</h3></div><span class="selection-count">AI powered</span></div>
+            <div id="career-chat-history" class="career-chat-history"><p class="conversation-empty">Ask about skills, career paths, placements, or interview preparation.</p></div>
+            <form id="career-chat-form" class="career-chat-form"><textarea id="career-chat-input" rows="3" placeholder="What should I learn next for my target role?"></textarea><button class="button button-primary" type="submit">Ask coach <span>→</span></button></form>
+          </section>
+        </div>
+      </section>
+      <section class="project-library shell" id="project-viva">
+        <div class="section-title"><div><p class="eyebrow">PROJECT VIVA STUDIO</p><h2>Defend your work with confidence.</h2><p class="section-subtitle">Practice the questions examiners, reviewers, and technical panels ask about your project.</p></div><button class="text-button" type="button" data-action="project-custom">Build a custom viva <span>→</span></button></div>
+        <div class="project-spotlight panel"><div class="spotlight-orb"><span>✦</span></div><div><p class="eyebrow">PREPARE YOUR PROJECT</p><h3>From project story to confident defense.</h3><p>Choose a viva format, upload context in the setup wizard, and rehearse architecture, implementation, results, and your individual contribution.</p><div class="spotlight-tags"><span>18 question categories</span><span>AI follow-ups</span><span>Editable transcript</span></div></div><button class="button button-primary" type="button" data-action="project-start" data-type="Major Project Viva">Start project prep <span>→</span></button></div>
+        <div class="project-card-grid" id="project-card-grid"></div>
+        <section class="project-categories panel"><div class="panel-heading"><div><p class="eyebrow">QUESTION MAP</p><h3>Prepare for every angle</h3><p class="section-subtitle">Select a category to build a project-specific AI question bank.</p></div><span class="selection-count" id="project-category-count">18 categories</span></div><div class="project-context-grid"><label>Project name<input id="project-name" type="text" placeholder="e.g. Intervexa AI"></label><label>Technology stack<input id="project-stack" type="text" placeholder="e.g. Flask, Gemini, JavaScript"></label><label class="full-width">Project description<textarea id="project-description" rows="3" placeholder="Describe the problem, solution, architecture, and your results. Add report or PPT notes here."></textarea></label><label>Team / individual contribution<textarea id="project-contribution" rows="2" placeholder="What did you personally build?"></textarea></label><label>Question difficulty<select id="project-difficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option><option>Expert</option></select></label><label>Questions per category<select id="project-question-count"><option selected>5</option><option>10</option><option>15</option><option>20</option></select></label></div><div class="project-context-actions"><button class="button button-primary" type="button" data-action="generate-project-questions">Generate Questions</button><span id="project-context-status" class="question-bank-status" aria-live="polite">Add project context before generating questions.</span></div><div class="category-pills" id="project-category-pills"></div></section>
+        <section class="project-question-bank panel hidden" id="project-question-bank" aria-live="polite"><div class="panel-heading"><div><p class="eyebrow">AI QUESTION BANK</p><h3 id="question-bank-title">Select a category to begin</h3></div><div class="question-bank-actions"><button class="button button-quiet" type="button" data-action="generate-more-project-questions">Generate more</button><button class="button button-quiet" type="button" data-action="regenerate-project-questions">Regenerate</button></div></div><div class="question-bank-toolbar"><input id="project-question-search" type="search" placeholder="Search generated questions"><select id="project-question-filter"><option value="all">All questions</option><option value="pending">Pending</option><option value="completed">Completed</option><option value="difficult">Difficult</option></select></div><div id="project-question-list" class="project-question-list"></div></section>
+      </section>
+    </div>
+    <section class="feature-hub shell" id="resume-analyzer">
+      <div class="section-title"><div><p class="eyebrow">AI RESUME ANALYZER</p><h2>Turn your resume into an interview plan.</h2><p class="section-subtitle">Paste resume text for grounded Gemini feedback. No claims are invented.</p></div></div>
+      <div class="feature-grid"><section class="panel"><form id="resume-form" class="feature-form"><label>Target role<input id="resume-role" placeholder="e.g. Backend Engineer"></label><label>Resume text<textarea id="resume-text" rows="10" placeholder="Paste your resume text here…"></textarea></label><button class="button button-primary" type="submit">Analyze resume <span>→</span></button></form></section><section class="panel feature-output" id="resume-output"><p class="conversation-empty">Your grounded resume analysis will appear here.</p></section></div>
+    </section>
+    <section class="feature-hub shell" id="coding-arena">
+      <div class="section-title"><div><p class="eyebrow">CODING INTERVIEW ARENA</p><h2>Practice problems with real evaluation.</h2></div></div>
+      <section class="panel"><div class="feature-controls"><label>Topic<select id="coding-topic"><option>arrays</option><option>strings</option><option>graphs</option><option>dynamic programming</option><option>system design</option></select></label><label>Difficulty<select id="coding-difficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select></label><button class="button button-primary" type="button" data-action="generate-coding-question">Generate problem</button></div><div id="coding-question" class="coding-question"><p class="conversation-empty">Generate a problem to begin.</p></div><div id="coding-answer-panel" class="hidden"><label>Your solution<textarea id="coding-answer" rows="10" placeholder="Write pseudocode or code and explain your approach…"></textarea></label><button class="button button-primary" type="button" data-action="evaluate-coding-answer">Evaluate solution</button><div id="coding-output"></div></div></section>
+    </section>
+    <section class="feature-hub shell" id="skill-galaxy">
+      <div class="section-title"><div><p class="eyebrow">AI SKILL GALAXY</p><h2>See the skills your practice is building.</h2></div><button class="button button-quiet" type="button" data-action="refresh-skills">Refresh skills</button></div>
+      <section class="panel" id="skills-output"><p class="conversation-empty">Complete authenticated interviews to calculate skill progress.</p></section>
+    </section>
+
+    <section class="setup-view shell hidden" id="setup-view">
+      <button class="back-button" type="button" data-action="back-dashboard">← Dashboard</button>
+      <div class="setup-heading"><p class="eyebrow">NEW INTERVIEW</p><h2>Make it relevant to you.</h2><p>Choose your practice type, then tune the session to match the real thing.</p></div>
+      <div class="setup-stepper"><span class="current"><b>1</b> Interview type</span><i></i><span><b>2</b> Configure</span><i></i><span><b>3</b> Practice</span></div>
+      <form id="setup-form">
+        <div class="setup-main">
+          <section class="panel setup-card"><div class="panel-heading"><div><p class="eyebrow">STEP 1</p><h3>What would you like to practice?</h3></div><span class="selection-count" id="selection-label">Technical Interview</span></div><div class="type-grid" id="type-grid"></div><div class="project-setup-panel hidden" id="project-setup-panel"><div class="form-divider"></div><div class="panel-heading"><div><p class="eyebrow">PROJECT VIVA</p><h3>Choose your question categories</h3></div><span class="selection-count" id="project-selection-count">6 selected</span></div><div class="setup-category-grid" id="setup-project-categories"></div></div></section>
+          <section class="panel setup-card configuration"><div class="panel-heading"><div><p class="eyebrow">STEP 2</p><h3>Configure your session</h3></div></div><div class="form-grid"><label>Job role<input id="role" type="text" value="Product Designer" placeholder="e.g. Frontend Engineer"></label><label>Specialization<input id="specialization" type="text" placeholder="e.g. Growth, fintech, React"></label><label>Experience level<select id="experience"><option>Entry level</option><option selected>Mid level</option><option>Senior</option><option>Lead / Executive</option></select></label><label>Difficulty<select id="difficulty"><option>Adaptive</option><option>Easy</option><option>Challenging</option><option>Expert</option></select></label><label>Duration<select id="duration"><option>10 minutes</option><option selected>15 minutes</option><option>30 minutes</option><option>45 minutes</option></select></label><label>Number of questions<select id="question-count">          <option selected>5 questions</option><option>10 questions</option><option>15 questions</option><option>20 questions</option><option>Custom</option>          </select></label><label id="custom-question-count-label" class="hidden">Custom question count<input id="custom-question-count" type="number" min="1" max="50" value="5"></label><label>Language<select id="language"><option>English</option><option>Hindi</option><option>Hinglish</option></select></label><label>Interviewer personality<select id="personality"><option>Friendly</option><option selected>Professional</option><option>Strict</option></select></label></div><div class="form-divider"></div><div class="form-grid"><label>Interview mode<select id="mode"><option>Voice Interview with Live Transcript</option>          <option selected>Text Interview</option><option>Camera + Voice Interview</option></select></label><label>Feedback mode<select id="feedback-mode"><option>After every question</option><option>At the end</option></select></label><label>          Topic selection<select id="topics" multiple size="4" aria-label="Technical interview topics"></select></label><label>Company selection<input id="company" type="text" placeholder="Optional company name"></label></div><div class="device-preferences"><label><input id="camera-preference" type="checkbox" checked> Camera on</label><label><input id="mic-preference" type="checkbox" checked> Microphone on</label></div><label class="upload-field">Resume <span class="field-note">Optional · PDF or DOCX</span><input id="resume" type="file" accept=".pdf,.doc,.docx"><span class="file-label">Choose a resume to personalize questions <b>Browse</b></span></label><label>Custom instructions<textarea id="instructions" rows="3" placeholder="Tell the interviewer anything useful..."></textarea></label><p id="interview-setup-status" class="interview-setup-status" role="status" aria-live="polite"></p><button class="button button-primary start-configured" type="submit">Start Interview Now <span>→</span></button></section>
+        </div>
+      </form>
+    </section>
+
+    <section class="interview-view shell hidden" id="interview-view">
+      <div class="interview-top"><div><button class="back-button" type="button" data-action="leave-interview">← Leave interview</button><p class="eyebrow"><span class="status-dot"></span> LIVE SESSION</p><h2 id="interview-title">Technical Interview <span>·</span> Product Designer</h2></div><div class="timer" id="timer">00:00</div></div>
+      <div class="interview-layout"><section class="panel camera-card"><div class="camera-frame"><video id="camera-video" autoplay muted playsinline></video><div class="camera-placeholder" id="camera-placeholder"><div class="camera-orb">✦</div><strong>Camera preview</strong><small>Camera access is optional</small></div><span class="camera-tag"><i></i> <span id="ai-state">AI is listening</span></span></div><div class="media-controls"><button class="control-button" type="button" data-action="toggle-camera">▣ <span>Camera</span></button><button class="control-button" type="button" data-action="toggle-interviewer-voice">🔊 <span>Interviewer voice</span></button><button class="control-button" type="button" data-action="cycle-mode">↔ <span id="mode-switch-label">Switch to text</span></button></div><div class="permission-state" id="permission-state">Camera is optional. Microphone access starts when you click Start Speaking.</div><div class="conversation-panel"><div class="conversation-heading"><span>LIVE TRANSCRIPT</span><button class="text-button" type="button" data-action="clear-transcript">Clear</button></div><div id="conversation-history" class="conversation-history"><p class="conversation-empty">Your conversation will appear here.</p></div></div></section>      <section class="panel question-card"><div id="question-navigation" class="question-navigation" aria-label="Interview questions"></div><div class="question-header"><span>QUESTION <b id="question-number">01</b> / <b id="question-total">05</b></span><div class="question-track"><i id="question-progress"></i></div></div><h3 id="question-text">Tell me about a project you're particularly proud of and the impact it had.</h3><p class="question-hint">Take a breath, then answer as if you were speaking to a real interviewer.</p><div class="speech-indicator" id="speech-indicator"><i></i><span id="speech-label">AI voice is ready</span></div><div class="speech-controls" aria-label="AI interviewer voice controls"><button class="text-button" type="button" data-action="play-speech">▶ Play</button><button class="text-button" type="button" data-action="pause-speech">Ⅱ Pause</button><button class="text-button" type="button" data-action="stop-speech">■ Stop</button><button class="text-button" type="button" data-action="repeat-question">↻ Repeat question</button><label>Voice<select id="speech-voice"><option value="">Default voice</option></select></label><label>Speed<input id="speech-rate" type="range" min="0.7" max="1.3" step="0.05" value="0.94" aria-label="Speech speed"></label><label>Volume<input id="speech-volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Speech volume"></label></div><textarea id="answer-input" rows="6" placeholder="Type your answer here, or use speech input..."></textarea><div class="answer-tools"><span id="answer-status">Answer when you're ready</span><button class="text-button" type="button" data-action="clear-answer">Clear</button></div><div class="voice-actions"><button class="button button-primary" type="button" data-action="start-speaking">Start Speaking</button><button class="button button-quiet" type="button" data-action="stop-speaking">Stop Speaking</button><button class="button button-primary next-button" type="button" data-action="next-question">Submit Answer <span>→</span></button></div><button class="button pause-button" type="button" data-action="pause-interview">Pause interview</button><button class="button end-button" type="button" data-action="end-interview">End interview</button></section></div>
+    </section>
+
+    <section class="feedback-view shell hidden" id="feedback-view">
+      <button class="back-button" type="button" data-action="back-dashboard">← Dashboard</button><div class="feedback-heading"><p class="eyebrow">SESSION COMPLETE</p><h2>Good work, Jordan.</h2><p>Here is a practical breakdown of your performance.</p></div><div class="feedback-grid"><section class="panel score-card"><p class="eyebrow">OVERALL SCORE</p><strong id="feedback-score">82<span>/100</span></strong><p class="up" id="feedback-delta">Based on your submitted answers</p><div class="score-ring"><span id="feedback-ring">82</span></div></section><section class="panel feedback-card"><p class="eyebrow">AI FEEDBACK</p><h3 id="feedback-summary">Clear thinking with room to tighten delivery.</h3><div class="feedback-columns"><div><b class="feedback-good">Strengths</b><p id="feedback-strengths">Structured answers<br>Good use of examples<br>Calm, confident tone</p></div><div><b class="feedback-focus">Improve next</b><p id="feedback-improvements">Lead with the outcome<br>Use fewer filler words<br>Keep answers concise</p></div></div><button class="button button-primary" type="button" data-action="start-setup">Practice again <span>→</span></button></section></div><div class="results-grid"><section class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">SCORECARD</p><h3>How you showed up</h3></div></div><div class="result-bars"><div><span>Communication</span><b id="communication-score">82%</b><i><em style="width:82%"></em></i></div><div><span>Technical knowledge</span><b id="technical-score">76%</b><i><em style="width:76%"></em></i></div><div><span>Confidence & clarity</span><b id="confidence-score">79%</b><i><em style="width:79%"></em></i></div></div></section><section class="panel transcript-panel"><div class="panel-heading"><div><p class="eyebrow">SESSION NOTES</p><h3>Transcript</h3></div><span class="result-meta" id="result-meta">Text answers</span></div><div id="transcript-list" class="transcript-list"><p>Your submitted answers will appear here.</p></div></section></div></section>
+  </main>
+  <section class="demo-modal hidden" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-title">
+    <div class="demo-dialog">
+      <button class="demo-close" type="button" aria-label="Close demo" data-action="close-demo">×</button>
+      <div class="demo-heading"><p class="eyebrow">PRODUCT WALKTHROUGH · SIMULATED PREVIEW</p><h2 id="demo-title">See how confident practice feels.</h2><p>This guided preview uses sample content to demonstrate the product flow. It does not call Gemini or submit an interview.</p></div>
+      <div class="demo-stage"><div class="demo-step" id="demo-step"><span class="demo-step-label">01 / 04</span><h3 id="demo-step-title">Choose your interview</h3><p id="demo-step-copy">Start with a role-focused session and tune the difficulty, language, and interview mode.</p><div class="demo-ui demo-selection"><button class="demo-choice active">Technical interview <small>Adaptive · 5 questions</small></button><button class="demo-choice">Project viva <small>Deep project review</small></button></div></div></div>
+      <div class="demo-controls"><button class="button button-quiet" type="button" data-action="replay-demo">↺ Replay</button><button class="button button-primary" type="button" data-action="toggle-demo">Pause demo</button><button class="button button-quiet" type="button" data-action="next-demo">Next <span>→</span></button><div class="demo-dots" id="demo-dots"><i class="active"></i><i></i><i></i><i></i></div></div>
+    </div>
+  </section>
+  <footer><span>✦ intervexa.ai</span><span>Practice with purpose.</span><span>© <span id="current-year">2026</span> Intervexa</span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
