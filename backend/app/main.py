@@ -2,6 +2,7 @@
 import json
 import logging
 import hashlib
+import os
 import secrets
 from datetime import datetime, timedelta, timezone
 from functools import wraps
@@ -885,4 +886,8 @@ def career_coach_respond():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", "5000")),
+        debug=False,
+    )
