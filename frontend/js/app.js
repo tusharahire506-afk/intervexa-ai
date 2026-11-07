@@ -7,6 +7,41 @@
   const apiUrl = (path) => `${apiBase}${path}`;
   let csrfToken = '';
   let currentUser = null;
+  const reportStorage = () => currentUser ? localStorage : sessionStorage;
+  const reportStorageKey = () => currentUser ? `intervexa-interview-reports-${currentUser.id}` : 'intervexa-guest-interview-reports';
+  const readStoredReports = () => {
+    try {
+      const reports = JSON.parse(reportStorage().getItem(reportStorageKey()) || '[]');
+      return Array.isArray(reports) ? reports : [];
+    } catch (error) {
+      console.warn('Stored interview reports could not be read:', error);
+      return [];
+    }
+  };
+  const writeStoredReports = (reports) => reportStorage().setItem(reportStorageKey(), JSON.stringify(reports.slice(0, 20)));
+  const progressStorageKey = () => currentUser ? `intervexa-active-interview-${currentUser.id}` : 'intervexa-active-guest-interview';
+  const readInterviewProgress = () => {
+    try {
+      const progress = JSON.parse(reportStorage().getItem(progressStorageKey()) || 'null');
+      return progress && Array.isArray(progress.questions) ? progress : null;
+    } catch (error) {
+      console.warn('Saved interview progress could not be read:', error);
+      return null;
+    }
+  };
+  const persistInterviewProgress = () => {
+    if (interviewSessionState !== 'active' || !questions.length) return;
+    reportStorage().setItem(progressStorageKey(), JSON.stringify({
+      config: sessionConfig,
+      questions,
+      answers,
+      evaluations,
+      conversation,
+      questionIndex,
+      seconds
+    }));
+  };
+  const clearInterviewProgress = () => reportStorage().removeItem(progressStorageKey());
   const categories = [
     ['HR Interview','Culture & motivation','♙'],['Technical Interview','Core technical concepts','⌘'],['Coding Interview','Algorithms & code','</>'],['Behavioral Interview','Stories & leadership','♧'],
     ['System Design Interview','Architecture & scale','◫'],['Managerial Interview','People & priorities','◎'],['Communication Skills Interview','Speak with clarity','◒'],['Resume-Based Interview','Your experience','▤'],
@@ -113,12 +148,12 @@
   let projectMode = false;
   let selectedProjectCategories = projectCategories.slice(0, 6);
   let careerMessages = [];
-  let projectQuestionBank = JSON.parse(localStorage.getItem('intervexa-project-question-bank') || '{}');
+  let projectQuestionBank = JSON.parse(sessionStorage.getItem('intervexa-project-question-bank') || '{}');
   let selectedProjectQuestionCategory = '';
   let projectQuestionFilter = 'all';
   let projectQuestionSearch = '';
   let projectPracticeQuestion;
-  let projectPracticeAttempts = JSON.parse(localStorage.getItem('intervexa-project-viva-attempts') || '[]');
+  let projectPracticeAttempts = JSON.parse(sessionStorage.getItem('intervexa-project-viva-attempts') || '[]');
   let projectPracticeRecognition;
   let demoIndex = 0;
   let demoTimer;
@@ -178,14 +213,16 @@
   };
   const loadUserHistory = async () => {
     if (!currentUser) {
-      $('#summary-count').textContent = '0';
-      $('#summary-average').innerHTML = '—<span>/100</span>';
-      $('#recent-interviews').innerHTML = '<p class="conversation-empty">Sign in and complete an interview to build your history.</p>';
-      $('#hero-session-count').textContent = '0';
+      const reports = readStoredReports();
+      const scores = reports.map((item) => item.analysis?.overall_score).filter((score) => typeof score === 'number');
+      $('#summary-count').textContent = String(reports.length);
+      $('#summary-average').innerHTML = `${scores.length ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length) : '—'}<span>/100</span>`;
+      $('#recent-interviews').innerHTML = reports.length ? reports.slice(0, 3).map((report) => `<div class="list-row"><span class="list-icon technical">✦</span><div><strong>${escapeHtml(report.config?.type || 'Interview')}</strong><small>Guest session · ${escapeHtml(new Date(report.createdAt || Date.now()).toLocaleDateString())}</small></div><b class="score average">${typeof report.analysis?.overall_score === 'number' ? report.analysis.overall_score : '—'}</b><button class="report-button" type="button" data-action="view-report">View report</button></div>`).join('') : '<p class="conversation-empty">Guest results will appear here for this browser session.</p>';
+      $('#hero-session-count').textContent = String(reports.length);
       $('#hero-streak').textContent = 'Start your practice streak';
       $('#summary-streak').innerHTML = '0 <small>days</small>';
-      $('#summary-best').textContent = '—';
-      $('#dashboard-skills').innerHTML = '<p class="conversation-empty">Sign in to calculate your snapshot.</p>';
+      $('#summary-best').textContent = scores.length ? Math.max(...scores) : '—';
+      $('#dashboard-skills').innerHTML = '<p class="conversation-empty">Sign in to save your skill snapshot.</p>';
       return;
     }
     try {
@@ -229,6 +266,21 @@
     sessionStorage.removeItem('intervexa-auth-continuation');
     if (continuation === 'start-setup') { enterDashboard(); showView('setup-view'); updateProjectSetup(); }
     if (continuation === 'project-start') { enterDashboard(); projectMode = true; showView('setup-view'); updateProjectSetup(); }
+  };
+  const continueAsGuest = async () => {
+    if (currentUser) {
+      try {
+        await authRequest('/api/auth/logout', { method: 'POST', body: '{}' });
+      } catch (error) {
+        showToast(`Could not switch to Guest Mode: ${error.message}`);
+        return;
+      }
+    }
+    applyUser(null);
+    closeAuth();
+    enterDashboard();
+    continueAfterAuth();
+    await loadUserHistory();
   };
   const demoSteps = [
     ['Choose your interview', 'Start with a role-focused session and tune the difficulty, language, and interview mode.', '<div class="demo-ui demo-selection"><button class="demo-choice active">Technical interview <small>Adaptive · 5 questions</small></button><button class="demo-choice">Project viva <small>Deep project review</small></button></div>'],
@@ -283,8 +335,8 @@
     contribution: $('#project-contribution')?.value.trim() || ''
   });
   const saveProjectState = () => {
-    localStorage.setItem('intervexa-project-question-bank', JSON.stringify(projectQuestionBank));
-    localStorage.setItem('intervexa-project-viva-attempts', JSON.stringify(projectPracticeAttempts.slice(-100)));
+    sessionStorage.setItem('intervexa-project-question-bank', JSON.stringify(projectQuestionBank));
+    sessionStorage.setItem('intervexa-project-viva-attempts', JSON.stringify(projectPracticeAttempts.slice(-100)));
   };
   const projectStats = (category) => {
     const items = projectQuestionBank[category] || [];
@@ -409,8 +461,14 @@
     }
   };
   const requestFeature = async (path, body) => {
-    if (!currentUser) { openAuth('login'); throw new Error('Sign in to use this feature and save your progress.'); }
-    const result = await authRequest(path, { method: 'POST', body: JSON.stringify(body) });
+    const response = await fetch(apiUrl(path), {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {}) },
+      body: JSON.stringify(body)
+    });
+    const result = await readJsonResponse(response, 'AI feature request failed');
+    if (!response.ok || result.success === false) throw new Error(`${result.error || 'AI feature unavailable'}${result.code ? ` (${result.code})` : ''}`);
     return result;
   };
   const renderResumeAnalysis = (analysis) => {
@@ -733,9 +791,10 @@
       evaluations: [...evaluations],
       analysis
     };
-    const reports = JSON.parse(localStorage.getItem('intervexa-interview-reports') || '[]');
+    const reports = readStoredReports();
     reports.unshift(report);
-    localStorage.setItem('intervexa-interview-reports', JSON.stringify(reports.slice(0, 20)));
+    writeStoredReports(reports);
+    clearInterviewProgress();
     if (currentUser) {
       try {
         await authRequest('/api/interviews', { method: 'POST', body: JSON.stringify({ config: sessionConfig, questions, answers, evaluations, analysis }) });
@@ -1206,6 +1265,7 @@
       throw new Error('The first interview question could not be initialized.');
     }
     interviewSessionState = 'active';
+    persistInterviewProgress();
     interviewInitializationInFlight = false;
     if (startButton) startButton.disabled = false;
     hideInterviewPreparation();
@@ -1234,6 +1294,29 @@
       setInterviewSetupStatus(error.message || 'Interview setup failed. Please try again.', true);
       showToast(error.message || 'Interview setup failed. Please try again.');
     }
+  };
+  const resumeInterview = () => {
+    const progress = readInterviewProgress();
+    if (!progress) return false;
+    sessionConfig = progress.config || {};
+    questions = progress.questions;
+    answers = Array.isArray(progress.answers) ? progress.answers : [];
+    evaluations = Array.isArray(progress.evaluations) ? progress.evaluations : [];
+    conversation = Array.isArray(progress.conversation) ? progress.conversation : [];
+    questionIndex = Math.min(Number(progress.questionIndex) || 0, questions.length - 1);
+    seconds = Number(progress.seconds) || 0;
+    finalAnalysis = undefined;
+    projectMode = false;
+    interviewSessionState = 'active';
+    showView('interview-view');
+    ensureInterviewControls();
+    $('#interview-title').innerHTML = `${escapeHtml(sessionConfig.type || 'Interview')} <span>·</span> ${escapeHtml(sessionConfig.role || 'Practice session')}`;
+    $('#conversation-history').innerHTML = '<p class="conversation-empty">Your conversation will appear here.</p>';
+    conversation.forEach((entry) => appendConversation(entry.speaker, entry.text));
+    prepareQuestion();
+    startTimer(false);
+    updateModeSwitch();
+    return true;
   };
   const completeInterview = async (retry = false) => {
     if (analysisInFlight || (!retry && interviewSessionState !== 'active') || !questions.length) return;
@@ -1301,10 +1384,10 @@
       delta: Number.isFinite(previous) ? score - previous : score,
       feedback: `${(evaluation.strengths || []).join(' ')} ${(evaluation.improvement_advice || '')}`.trim()
     };
-    const reports = JSON.parse(localStorage.getItem('intervexa-interview-reports') || '[]');
+    const reports = readStoredReports();
     if (reports[0]) {
       reports[0].practiceResults = practiceResults;
-      localStorage.setItem('intervexa-interview-reports', JSON.stringify(reports.slice(0, 20)));
+      writeStoredReports(reports);
     }
     renderFeedback(finalAnalysis);
     practiceQuestion(index);
@@ -1320,6 +1403,7 @@
     stopSpeech();
     renderLiveTranscript('');
     answers[questionIndex] = answer;
+    persistInterviewProgress();
     appendConversation('You', answer, true);
     $('#answer-status').textContent = 'AI is considering your answer…';
     $('#speech-label').textContent = 'Processing answer…';
@@ -1500,9 +1584,9 @@
       }
       showView('dashboard-view');
     }
-    if (action === 'quick-start') { if (requireAuth('start-setup')) return; enterDashboard(); projectMode = false; selectedType = target.dataset.type; $('#selection-label').textContent = selectedType; renderCategories(); showView('setup-view'); }
+    if (action === 'continue-guest') { continueAsGuest(); return; }
+    if (action === 'quick-start') { enterDashboard(); projectMode = false; selectedType = target.dataset.type; $('#selection-label').textContent = selectedType; renderCategories(); showView('setup-view'); }
     if (action === 'project-start' || action === 'project-custom') {
-      if (requireAuth('project-start')) return;
       enterDashboard();
       projectMode = true;
       selectedType = action === 'project-custom' ? 'Custom Project Viva' : target.dataset.type;
@@ -1511,7 +1595,8 @@
       showView('setup-view');
     }
     if (action === 'resume') {
-      const reports = JSON.parse(localStorage.getItem('intervexa-interview-reports') || '[]');
+      if (resumeInterview()) return;
+      const reports = readStoredReports();
       if (reports[0]?.config) {
         projectMode = false;
         selectedType = reports[0].config.type || 'Technical Interview';
@@ -1555,7 +1640,7 @@
       }).catch((error) => showToast(error.message));
     }
     if (action === 'view-report') {
-      const reports = JSON.parse(localStorage.getItem('intervexa-interview-reports') || '[]');
+      const reports = readStoredReports();
       const report = reports[0];
       if (!report) {
         showToast('Complete an interview before opening a report.');

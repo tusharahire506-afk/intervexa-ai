@@ -55,6 +55,8 @@ body::after {
 .button:focus-visible, .control-button:focus-visible, .text-button:focus-visible, .back-button:focus-visible, .nav-links a:focus-visible { outline: 2px solid var(--space-blue); outline-offset: 3px; }
 .hero-actions { flex-wrap: wrap; }
 .hero-actions .button { min-width: 154px; }
+.guest-access { display: grid; gap: 10px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(194, 169, 250, .14); color: var(--muted); font-size: 14px; }
+.guest-access .button { width: 100%; }
 .section-title h2, .setup-heading h2, .feedback-heading h2 { font-size: clamp(30px, 3.2vw, 34px); }
 .panel-heading h3, .recommendation h3 { font-size: 23px; }
 .summary-card { padding: 24px; }

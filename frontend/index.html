@@ -57,7 +57,8 @@
       <form id="signup-form" class="auth-form hidden"><label>Full name<input id="signup-name" type="text" autocomplete="name" required></label><label>Email<input id="signup-email" type="email" autocomplete="email" required></label><label>Password<div class="password-field"><input id="signup-password" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-action="toggle-password" data-target="signup-password">Show</button></div></label><button class="button button-primary" type="submit">Create account <span>→</span></button></form>
       <form id="forgot-form" class="auth-form hidden"><label>Email<input id="forgot-email" type="email" autocomplete="email" required></label><button class="button button-primary" type="submit">Send reset instructions <span>→</span></button><button class="text-button auth-secondary" type="button" data-auth-view="reset">I have a reset token</button><button class="text-button auth-secondary" type="button" data-auth-view="login">Back to sign in</button></form>
       <form id="reset-form" class="auth-form hidden"><label>Reset token<input id="reset-token" required></label><label>New password<input id="reset-password" type="password" minlength="8" required></label><button class="button button-primary" type="submit">Reset password <span>→</span></button><button class="text-button auth-secondary" type="button" data-auth-view="login">Back to sign in</button></form>
-      <p id="auth-error" class="auth-error" role="alert"></p><p class="auth-note">Google sign-in is unavailable until OAuth credentials are configured on the backend.</p>
+      <div class="guest-access"><span>Just want to practice?</span><button class="button button-quiet" type="button" data-action="continue-guest">Continue as Guest <span>→</span></button></div>
+      <p id="auth-error" class="auth-error" role="alert"></p><p class="auth-note">Google sign-in is unavailable until OAuth credentials are configured on the backend. Guest sessions are temporary and stay in this browser tab.</p>
     </div>
   </section>
   <section class="profile-modal hidden" id="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title">
@@ -71,7 +72,7 @@
           <p class="eyebrow"><span class="status-dot"></span> Your practice space</p>
           <h1>Show up ready<br>for <em>anything.</em></h1>
           <p class="hero-description">A thoughtful AI mock interview that helps you build clearer answers, stronger delivery, and real confidence.</p>
-          <div class="hero-actions"><button class="button button-primary" type="button" data-action="start-setup">Start new interview <span>→</span></button><button class="button button-quiet" type="button" data-action="watch-demo">Watch demo <span>▶</span></button><button class="button button-quiet" type="button" data-action="resume">Resume last session</button></div>
+          <div class="hero-actions"><button class="button button-primary" type="button" data-action="start-setup">Start new interview <span>→</span></button><button class="button button-quiet" type="button" data-action="continue-guest">Continue as Guest <span>→</span></button><button class="button button-quiet" type="button" data-action="watch-demo">Watch demo <span>▶</span></button><button class="button button-quiet" type="button" data-action="resume">Resume last session</button></div>
           <p class="hero-note"><span id="hero-session-count">0</span> sessions completed <span>·</span> <span id="hero-streak">Start your practice streak</span></p>
         </div>
         <div class="orb-stage" id="orb-stage" aria-label="Interactive AI orb" role="img">

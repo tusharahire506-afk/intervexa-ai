@@ -788,7 +788,6 @@ Candidate answer: {answer}"""
 
 
 @app.post("/api/resume/analyze")
-@_auth_required
 def resume_analyze():
     csrf_error = _require_csrf()
     if csrf_error:
@@ -809,13 +808,13 @@ Resume: {resume_text}"""
     required = ("summary", "strengths", "weaknesses", "missing_keywords", "experience_highlights", "recommended_projects", "interview_questions", "overall_score")
     if not isinstance(result, dict) or not all(key in result for key in required) or not isinstance(result["overall_score"], (int, float)) or not 0 <= result["overall_score"] <= 100:
         return _error_response("The AI provider returned an invalid resume analysis.", "INVALID_RESUME_ANALYSIS", 502)
-    with connect() as connection:
-        connection.execute("INSERT INTO resume_analyses (user_id, resume_text, analysis_json) VALUES (?, ?, ?)", (session["user_id"], resume_text, json.dumps(result)))
+    if _current_user() is not None:
+        with connect() as connection:
+            connection.execute("INSERT INTO resume_analyses (user_id, resume_text, analysis_json) VALUES (?, ?, ?)", (session["user_id"], resume_text, json.dumps(result)))
     return jsonify({"success": True, "analysis": result})
 
 
 @app.post("/api/coding/question")
-@_auth_required
 def coding_question():
     csrf_error = _require_csrf()
     if csrf_error:
@@ -836,7 +835,6 @@ Do not include a solution. Make the statement self-contained and technically pre
 
 
 @app.post("/api/coding/evaluate")
-@_auth_required
 def coding_evaluate():
     csrf_error = _require_csrf()
     if csrf_error:
@@ -859,8 +857,9 @@ Candidate solution: {answer}"""
     required = ("score", "correctness", "algorithm_quality", "complexity", "code_quality", "bugs", "missing_cases", "strengths", "improvements", "ideal_approach")
     if not isinstance(result, dict) or not all(key in result for key in required) or not isinstance(result["score"], (int, float)) or not 0 <= result["score"] <= 100:
         return _error_response("The AI provider returned an invalid coding evaluation.", "INVALID_CODING_EVALUATION", 502)
-    with connect() as connection:
-        connection.execute("INSERT INTO coding_attempts (user_id, prompt, answer, evaluation_json) VALUES (?, ?, ?, ?)", (session["user_id"], problem, answer, json.dumps(result)))
+    if _current_user() is not None:
+        with connect() as connection:
+            connection.execute("INSERT INTO coding_attempts (user_id, prompt, answer, evaluation_json) VALUES (?, ?, ?, ?)", (session["user_id"], problem, answer, json.dumps(result)))
     return jsonify({"success": True, "evaluation": result})
 
 
