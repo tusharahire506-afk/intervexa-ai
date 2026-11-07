@@ -3,7 +3,7 @@
   if (currentYear) currentYear.textContent = String(new Date().getFullYear());
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
-  const apiBase = (window.INTERVEXA_API_BASE || 'http://127.0.0.1:5000').replace(/\/$/, '');
+  const apiBase = (window.INTERVEXA_API_BASE || '').replace(/\/$/, '');
   const apiUrl = (path) => `${apiBase}${path}`;
   let csrfToken = '';
   let currentUser = null;
